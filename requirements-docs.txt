@@ -1,1 +1,6 @@
-sphinx
+aiohttp <= 0.21.6
+dirty-models
+aio-service-client
+sphinx >= 1.4
+sphinx-autodoc-typehints
+dirty_models_sphinx

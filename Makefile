@@ -1,6 +1,6 @@
 
-PACKAGE_NAME = telebot
-PACKAGE_COVERAGE = telebot
+PACKAGE_NAME = aiotelebot
+PACKAGE_COVERAGE = aiotelebot
 
 help:
 	@echo "Options"

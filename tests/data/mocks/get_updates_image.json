@@ -1,0 +1,43 @@
+{
+  "ok": true,
+  "result": [
+    {
+      "update_id": 100000001,
+      "message": {
+        "message_id": 1002,
+        "from": {
+          "id": 10000002,
+          "first_name": "Telebot",
+          "username": "telebotuser"
+        },
+        "chat": {
+          "id": 10000001,
+          "first_name": "Telebot",
+          "username": "telebotuser",
+          "type": "private"
+        },
+        "date": 1475178814,
+        "photo": [
+          {
+            "file_id": "aaAAbb1",
+            "file_size": 565,
+            "width": 90,
+            "height": 25
+          },
+          {
+            "file_id": "aaAAbb2",
+            "file_size": 3134,
+            "width": 320,
+            "height": 90
+          },
+          {
+            "file_id": "aaAAbb3",
+            "file_size": 6533,
+            "width": 580,
+            "height": 164
+          }
+        ]
+      }
+    }
+  ]
+}
