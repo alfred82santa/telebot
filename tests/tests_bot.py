@@ -45,7 +45,7 @@ class TelegramModelFormatterIterTests(TestCase):
                                                                          "first_name": "Telebot",
                                                                          "username": "telebotuser",
                                                                          "type": "private"},
-                                                                "date": datetime.datetime(2016, 9, 29, 21, 53, 34),
+                                                                "date": datetime.datetime.fromtimestamp(1475178814),
                                                                 "text": "test"}})
 
     @mock_manager.patch_mock_desc({'file': os.path.join(MOCK_DIR, 'get_updates_image.json')})
@@ -62,7 +62,7 @@ class TelegramModelFormatterIterTests(TestCase):
                                                                          "first_name": "Telebot",
                                                                          "username": "telebotuser",
                                                                          "type": "private"},
-                                                                "date": datetime.datetime(2016, 9, 29, 21, 53, 34),
+                                                                "date": datetime.datetime.fromtimestamp(1475178814),
                                                                 "photo": [{"file_id": "aaAAbb1",
                                                                            "file_size": 565,
                                                                            "width": 90,

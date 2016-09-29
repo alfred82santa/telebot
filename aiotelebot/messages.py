@@ -1259,7 +1259,6 @@ class SetWebhookRequest(BaseModel):
 ############
 # Response #
 ############
-
 class Response(BaseModel):
     """
     Response model.
