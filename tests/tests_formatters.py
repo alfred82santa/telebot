@@ -10,13 +10,13 @@ from aiohttp.multipart import MultipartWriter
 
 from telebot.formatters import TelegramModelFormatterIter, TelegramJsonEncoder, ContainsFileError, telegram_encoder, \
     telegram_decoder
-from telebot.messages import SendPhotoRequest, InlineKeyboardMarkup, AnswerInlineQuery, InlineQueryResultArticle, \
+from telebot.messages import SendPhotoRequest, InlineKeyboardMarkup, AnswerInlineQueryRequest, InlineQueryResultArticle, \
     InputTextMessageContent, FileModel, Response
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
 
 
-class TelegramModelFormatterIterTest(TestCase):
+class TelegramModelFormatterIterTests(TestCase):
 
     def test_simple(self):
 
@@ -75,7 +75,7 @@ class TelegramModelFormatterIterTest(TestCase):
 
     def test_over_serialized_array(self):
 
-        request = AnswerInlineQuery({'inline_query_id': 'inline_query_id_tests',
+        request = AnswerInlineQueryRequest({'inline_query_id': 'inline_query_id_tests',
                                      'cache_time': 300,
                                      'results': [
                                          InlineQueryResultArticle(
@@ -165,7 +165,7 @@ class TelegramModelFormatterIterTest(TestCase):
                          data)
 
 
-class TelegramJsonEncoderIterTest(TestCase):
+class TelegramJsonEncoderIterTests(TestCase):
 
     def test_simple(self):
 
@@ -224,7 +224,7 @@ class TelegramJsonEncoderIterTest(TestCase):
 
     def test_over_serialized_array(self):
 
-        request = AnswerInlineQuery({'inline_query_id': 'inline_query_id_tests',
+        request = AnswerInlineQueryRequest({'inline_query_id': 'inline_query_id_tests',
                                      'cache_time': 300,
                                      'results': [
                                          InlineQueryResultArticle(
@@ -289,7 +289,7 @@ class TelegramJsonEncoderIterTest(TestCase):
             dumps(request, cls=TelegramJsonEncoder)
 
 
-class TelegramEncoderTest(TestCase):
+class TelegramEncoderTests(TestCase):
 
     def test_simple(self):
 
@@ -348,7 +348,7 @@ class TelegramEncoderTest(TestCase):
 
     def test_over_serialized_array(self):
 
-        request = AnswerInlineQuery({'inline_query_id': 'inline_query_id_tests',
+        request = AnswerInlineQueryRequest({'inline_query_id': 'inline_query_id_tests',
                                      'cache_time': 300,
                                      'results': [
                                          InlineQueryResultArticle(
@@ -451,7 +451,7 @@ class TelegramEncoderTest(TestCase):
                 raise Exception('Unknown field')
 
 
-class TelegramDecoderTest(TestCase):
+class TelegramDecoderTests(TestCase):
 
     def test_simple(self):
         data = {'ok': True,

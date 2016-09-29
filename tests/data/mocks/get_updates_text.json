@@ -1,0 +1,24 @@
+{
+  "ok": true,
+  "result": [
+    {
+      "update_id": 100000001,
+      "message": {
+        "message_id": 1001,
+        "from": {
+          "id": 10000002,
+          "first_name": "Telebot",
+          "username": "telebotuser"
+        },
+        "chat": {
+          "id": 10000001,
+          "first_name": "Telebot",
+          "username": "telebotuser",
+          "type": "private"
+        },
+        "date": 1475178814,
+        "text": "test"
+      }
+    }
+  ]
+}
