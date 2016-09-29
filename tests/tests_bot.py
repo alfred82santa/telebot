@@ -11,7 +11,7 @@ from .telegram_api_mock_spec import mock_spec
 
 
 class TelegramModelFormatterIterTests(TestCase):
-    
+
     maxDiff = None
 
     def setUp(self):
