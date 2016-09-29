@@ -8,9 +8,9 @@ from unittest.case import TestCase
 from aiohttp import hdrs
 from aiohttp.multipart import MultipartWriter
 
-from telebot.formatters import TelegramModelFormatterIter, TelegramJsonEncoder, ContainsFileError, telegram_encoder, \
+from aiotelebot.formatters import TelegramModelFormatterIter, TelegramJsonEncoder, ContainsFileError, telegram_encoder, \
     telegram_decoder
-from telebot.messages import SendPhotoRequest, InlineKeyboardMarkup, AnswerInlineQueryRequest, InlineQueryResultArticle, \
+from aiotelebot.messages import SendPhotoRequest, InlineKeyboardMarkup, AnswerInlineQueryRequest, InlineQueryResultArticle, \
     InputTextMessageContent, FileModel, Response
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')

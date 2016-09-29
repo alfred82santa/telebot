@@ -14,8 +14,8 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 LOG_DIR = os.path.join(os.path.dirname(__file__), 'logs')
 DOWNLOAD_DIR = os.path.join(os.path.dirname(__file__), 'downloads')
 
-from telebot import Bot
-from telebot.messages import GetFileRequest
+from aiotelebot import Bot
+from aiotelebot.messages import GetFileRequest
 
 
 def prepare_root_logger():

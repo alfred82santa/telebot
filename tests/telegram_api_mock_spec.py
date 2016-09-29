@@ -1,6 +1,6 @@
 import os
 
-from telebot.telegram_api_spec import spec
+from aiotelebot.telegram_api_spec import spec
 
 MOCK_DIR = os.path.join(os.path.dirname(__file__), 'data', 'mocks')
 

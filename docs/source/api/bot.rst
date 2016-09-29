@@ -2,6 +2,6 @@
 Bot class
 =========
 
-.. automodule:: telebot
+.. automodule:: aiotelebot
    :members:
    :undoc-members:

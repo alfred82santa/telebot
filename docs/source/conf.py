@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# Telebot documentation build configuration file, created by
+# aioTelebot documentation build configuration file, created by
 # sphinx-quickstart on Mon Sep  5 07:14:14 2016.
 #
 # This file is execfile()d with the current directory set to its
@@ -68,7 +68,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'Telebot'
+project = 'aioTelebot'
 copyright = '2016, Alfred'
 author = 'Alfred'
 
@@ -157,7 +157,7 @@ html_theme_options = {'github_user': 'alfred82santa',
 # The name for this set of Sphinx documents.
 # "<project> v<release> documentation" by default.
 #
-html_title = 'Telebot documentation'
+html_title = 'aioTelebot documentation'
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 #
@@ -266,7 +266,7 @@ html_sidebars = {
 # html_search_scorer = 'scorer.js'
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'Telebotdoc'
+htmlhelp_basename = 'aioTelebotdoc'
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -292,7 +292,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'Telebot.tex', 'Telebot Documentation',
+    (master_doc, 'aioTelebot.tex', 'aioTelebot Documentation',
      'Alfred', 'manual'),
 ]
 
@@ -334,7 +334,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'telebot', 'Telebot Documentation',
+    (master_doc, 'aiotelebot', 'aioTelebot Documentation',
      [author], 1)
 ]
 
@@ -349,8 +349,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'Telebot', 'Telebot Documentation',
-     author, 'Telebot', 'One line description of project.',
+    (master_doc, 'aioTelebot', 'aioTelebot Documentation',
+     author, 'aioTelebot', 'One line description of project.',
      'Miscellaneous'),
 ]
 

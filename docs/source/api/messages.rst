@@ -2,6 +2,6 @@
 Messages
 ========
 
-.. automodule:: telebot.messages
+.. automodule:: aiotelebot.messages
    :members:
    :undoc-members:

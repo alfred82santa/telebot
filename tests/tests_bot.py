@@ -4,8 +4,8 @@ import os
 from asynctest.case import TestCase
 from service_client.mocks import Mock, mock_manager
 
-from telebot import Bot
-from telebot.messages import User, Update, GetFileRequest, File
+from aiotelebot import Bot
+from aiotelebot.messages import User, Update, GetFileRequest, File
 from tests.telegram_api_mock_spec import MOCK_DIR
 from .telegram_api_mock_spec import mock_spec
 
