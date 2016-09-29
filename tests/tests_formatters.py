@@ -8,10 +8,10 @@ from unittest.case import TestCase
 from aiohttp import hdrs
 from aiohttp.multipart import MultipartWriter
 
-from aiotelebot.formatters import TelegramModelFormatterIter, TelegramJsonEncoder, ContainsFileError, telegram_encoder, \
-    telegram_decoder
-from aiotelebot.messages import SendPhotoRequest, InlineKeyboardMarkup, AnswerInlineQueryRequest, InlineQueryResultArticle, \
-    InputTextMessageContent, FileModel, Response
+from aiotelebot.formatters import TelegramModelFormatterIter, TelegramJsonEncoder, ContainsFileError, \
+    telegram_encoder, telegram_decoder
+from aiotelebot.messages import SendPhotoRequest, InlineKeyboardMarkup, AnswerInlineQueryRequest, \
+    InlineQueryResultArticle, InputTextMessageContent, FileModel, Response
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
 
@@ -76,21 +76,21 @@ class TelegramModelFormatterIterTests(TestCase):
     def test_over_serialized_array(self):
 
         request = AnswerInlineQueryRequest({'inline_query_id': 'inline_query_id_tests',
-                                     'cache_time': 300,
-                                     'results': [
-                                         InlineQueryResultArticle(
-                                             {'input_message_content': InputTextMessageContent(
-                                                 {'message_text': 'test text1'}),
-                                              'id': 'test_id_1',
-                                              'title': 'test title',
-                                              'description': 'description'}),
-                                         InlineQueryResultArticle(
-                                             {'input_message_content': InputTextMessageContent(
-                                                 {'message_text': 'test text2'}),
-                                              'id': 'test_id_2',
-                                              'title': 'test title',
-                                              'description': 'description'}),
-                                     ]})
+                                            'cache_time': 300,
+                                            'results': [
+                                                InlineQueryResultArticle(
+                                                    {'input_message_content': InputTextMessageContent(
+                                                        {'message_text': 'test text1'}),
+                                                        'id': 'test_id_1',
+                                                        'title': 'test title',
+                                                        'description': 'description'}),
+                                                InlineQueryResultArticle(
+                                                    {'input_message_content': InputTextMessageContent(
+                                                        {'message_text': 'test text2'}),
+                                                        'id': 'test_id_2',
+                                                        'title': 'test title',
+                                                        'description': 'description'}),
+                                            ]})
 
         data = {k: v for k, v in TelegramModelFormatterIter(request)}
 
@@ -225,21 +225,21 @@ class TelegramJsonEncoderIterTests(TestCase):
     def test_over_serialized_array(self):
 
         request = AnswerInlineQueryRequest({'inline_query_id': 'inline_query_id_tests',
-                                     'cache_time': 300,
-                                     'results': [
-                                         InlineQueryResultArticle(
-                                             {'input_message_content': InputTextMessageContent(
-                                                 {'message_text': 'test text1'}),
-                                              'id': 'test_id_1',
-                                              'title': 'test title',
-                                              'description': 'description'}),
-                                         InlineQueryResultArticle(
-                                             {'input_message_content': InputTextMessageContent(
-                                                 {'message_text': 'test text2'}),
-                                              'id': 'test_id_2',
-                                              'title': 'test title',
-                                              'description': 'description'}),
-                                     ]})
+                                            'cache_time': 300,
+                                            'results': [
+                                                InlineQueryResultArticle(
+                                                    {'input_message_content': InputTextMessageContent(
+                                                        {'message_text': 'test text1'}),
+                                                        'id': 'test_id_1',
+                                                        'title': 'test title',
+                                                        'description': 'description'}),
+                                                InlineQueryResultArticle(
+                                                    {'input_message_content': InputTextMessageContent(
+                                                        {'message_text': 'test text2'}),
+                                                        'id': 'test_id_2',
+                                                        'title': 'test title',
+                                                        'description': 'description'}),
+                                            ]})
 
         data = loads(dumps(request, cls=TelegramJsonEncoder))
 
@@ -349,21 +349,21 @@ class TelegramEncoderTests(TestCase):
     def test_over_serialized_array(self):
 
         request = AnswerInlineQueryRequest({'inline_query_id': 'inline_query_id_tests',
-                                     'cache_time': 300,
-                                     'results': [
-                                         InlineQueryResultArticle(
-                                             {'input_message_content': InputTextMessageContent(
-                                                 {'message_text': 'test text1'}),
-                                              'id': 'test_id_1',
-                                              'title': 'test title',
-                                              'description': 'description'}),
-                                         InlineQueryResultArticle(
-                                             {'input_message_content': InputTextMessageContent(
-                                                 {'message_text': 'test text2'}),
-                                              'id': 'test_id_2',
-                                              'title': 'test title',
-                                              'description': 'description'}),
-                                     ]})
+                                            'cache_time': 300,
+                                            'results': [
+                                                InlineQueryResultArticle(
+                                                    {'input_message_content': InputTextMessageContent(
+                                                        {'message_text': 'test text1'}),
+                                                        'id': 'test_id_1',
+                                                        'title': 'test title',
+                                                        'description': 'description'}),
+                                                InlineQueryResultArticle(
+                                                    {'input_message_content': InputTextMessageContent(
+                                                        {'message_text': 'test text2'}),
+                                                        'id': 'test_id_2',
+                                                        'title': 'test title',
+                                                        'description': 'description'}),
+                                            ]})
 
         data = loads(telegram_encoder(request))
 

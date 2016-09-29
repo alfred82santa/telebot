@@ -47,7 +47,6 @@ class TelegramError(Exception):
 
 
 def list_of(message_cls):
-
     """
     Automatic result message processor for lists.
 
@@ -62,7 +61,6 @@ def list_of(message_cls):
 
 
 def result_bool(_) -> True:
-
     """
     Result factory for success requests.
 
@@ -72,7 +70,6 @@ def result_bool(_) -> True:
 
 
 def message_or_true(msg) -> Union[bool, Message]:
-
     """
     Result factory for editing requests.
 

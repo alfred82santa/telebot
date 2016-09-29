@@ -1,9 +1,10 @@
 from mimetypes import guess_type
 
+from os.path import split
+
 from dirty_models.fields import StringIdField, StringField, ModelField, DateTimeField, ArrayField, IntegerField, \
     BooleanField, FloatField, MultiTypeField, BaseField, BlobField
 from dirty_models.models import BaseModel
-from os.path import split
 
 
 class StreamField(BaseField):
@@ -117,7 +118,6 @@ class MessageEntity(BaseModel):
 
 
 class ParseModeMixin(BaseModel):
-
     """
     Mixin model with parse mode definition.
     """
@@ -447,7 +447,6 @@ class BaseChatRequest(BaseModel):
 
 
 class GetChatRequest(BaseChatRequest):
-
     """
     Get chat request model.
 
@@ -458,7 +457,6 @@ class GetChatRequest(BaseChatRequest):
 
 
 class GetChatAdministratorsRequest(BaseChatRequest):
-
     """
     Get chat administrators request model.
 
@@ -469,7 +467,6 @@ class GetChatAdministratorsRequest(BaseChatRequest):
 
 
 class GetChatCountRequest(BaseChatRequest):
-
     """
     Get chat count request model.
 
@@ -480,7 +477,6 @@ class GetChatCountRequest(BaseChatRequest):
 
 
 class GetChatMemberRequest(BaseChatRequest):
-
     """
     Get chat count request model.
 
@@ -488,7 +484,6 @@ class GetChatMemberRequest(BaseChatRequest):
     """
 
     user_id = IntegerField()
-
 
 
 class BaseChatMessageRequest(BaseChatRequest):
@@ -908,7 +903,9 @@ class InlineQueryResultGif(BaseInlineQueryResultGif, ThumbMixin, TitledMixin, Ca
 
 class InlineQueryResultCachedGif(BaseInlineQueryResultGif, TitledMixin, CaptionMixin):
     """
-    Represents a link to an animated GIF file stored on the Telegram servers. By default, this animated GIF file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with specified content instead of the animation.
+    Represents a link to an animated GIF file stored on the Telegram servers. By default,
+    this animated GIF file will be sent by the user with an optional caption. Alternatively,
+    you can use input_message_content to send a message with specified content instead of the animation.
 
     .. seealso:: https://core.telegram.org/bots/api#inlinequeryresultcachedgif
     """
@@ -927,7 +924,9 @@ class BaseInlineQueryResultMpeg4Gif(BaseInlineQueryResult):
 
 class InlineQueryResultMpeg4Gif(BaseInlineQueryResultMpeg4Gif, ThumbMixin, TitledMixin, CaptionMixin):
     """
-    Represents a link to a video animation (H.264/MPEG-4 AVC video without sound). By default, this animated MPEG-4 file will be sent by the user with optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the animation.
+    Represents a link to a video animation (H.264/MPEG-4 AVC video without sound). By default,
+    this animated MPEG-4 file will be sent by the user with optional caption. Alternatively,
+    you can use input_message_content to send a message with the specified content instead of the animation.
 
     .. seealso:: https://core.telegram.org/bots/api#inlinequeryresultmpeg4gif
     """
@@ -939,7 +938,10 @@ class InlineQueryResultMpeg4Gif(BaseInlineQueryResultMpeg4Gif, ThumbMixin, Title
 
 class InlineQueryResultCachedMpeg4Gif(BaseInlineQueryResultMpeg4Gif, TitledMixin, CaptionMixin):
     """
-    Represents a link to a video animation (H.264/MPEG-4 AVC video without sound) stored on the Telegram servers. By default, this animated MPEG-4 file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the animation.
+    Represents a link to a video animation (H.264/MPEG-4 AVC video without sound) stored on the
+    Telegram servers. By default, this animated MPEG-4 file will be sent by the user with an optional
+    caption. Alternatively, you can use input_message_content to send a message with the specified
+    content instead of the animation.
 
     .. seealso:: https://core.telegram.org/bots/api#inlinequeryresultcachedmpeg4gif
     """
@@ -958,7 +960,9 @@ class BaseInlineQueryResultVideo(BaseInlineQueryResult):
 
 class InlineQueryResultVideo(BaseInlineQueryResultVideo, ThumbMixin, TitledMixin, CaptionMixin, DescriptionMixin):
     """
-    Represents a link to a page containing an embedded video player or a video file. By default, this video file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the video.
+    Represents a link to a page containing an embedded video player or a video file. By default,
+    this video file will be sent by the user with an optional caption. Alternatively, you can use
+    input_message_content to send a message with the specified content instead of the video.
 
     .. seealso:: https://core.telegram.org/bots/api#inlinequeryresultvideo
     """
@@ -972,7 +976,9 @@ class InlineQueryResultVideo(BaseInlineQueryResultVideo, ThumbMixin, TitledMixin
 
 class InlineQueryResultCachedVideo(BaseInlineQueryResultVideo, TitledMixin, CaptionMixin, DescriptionMixin):
     """
-    Represents a link to a video file stored on the Telegram servers. By default, this video file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the video.
+    Represents a link to a video file stored on the Telegram servers. By default, this video file will
+    be sent by the user with an optional caption. Alternatively, you can use input_message_content to
+    send a message with the specified content instead of the video.
 
     .. seealso:: https://core.telegram.org/bots/api#inlinequeryresultcachedvideo
     """
@@ -991,7 +997,9 @@ class BaseInlineQueryResultAudio(BaseInlineQueryResult):
 
 class InlineQueryResultAudio(BaseInlineQueryResultAudio, TitledMixin):
     """
-    Represents a link to an mp3 audio file. By default, this audio file will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the audio.
+    Represents a link to an mp3 audio file. By default, this audio file will be sent by the user.
+    Alternatively, you can use input_message_content to send a message with the specified content
+    instead of the audio.
 
     .. seealso:: https://core.telegram.org/bots/api#inlinequeryresultaudio
     """
@@ -1003,7 +1011,9 @@ class InlineQueryResultAudio(BaseInlineQueryResultAudio, TitledMixin):
 
 class InlineQueryResultCachedAudio(BaseInlineQueryResultAudio, TitledMixin):
     """
-    Represents a link to an mp3 audio file stored on the Telegram servers. By default, this audio file will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the audio.
+    Represents a link to an mp3 audio file stored on the Telegram servers. By default, this audio
+    file will be sent by the user. Alternatively, you can use input_message_content to send a message
+    with the specified content instead of the audio.
 
     .. seealso:: https://core.telegram.org/bots/api#inlinequeryresultcachedaudio
     """
@@ -1022,7 +1032,9 @@ class BaseInlineQueryResultVoice(BaseInlineQueryResult):
 
 class InlineQueryResultVoice(BaseInlineQueryResultVoice, TitledMixin):
     """
-    Represents a link to a voice recording in an .ogg container encoded with OPUS. By default, this voice recording will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the the voice message.
+    Represents a link to a voice recording in an .ogg container encoded with OPUS. By default,
+    this voice recording will be sent by the user. Alternatively, you can use input_message_content to
+    send a message with the specified content instead of the the voice message.
 
     .. seealso:: https://core.telegram.org/bots/api#inlinequeryresultvoice
     """
@@ -1033,7 +1045,9 @@ class InlineQueryResultVoice(BaseInlineQueryResultVoice, TitledMixin):
 
 class InlineQueryResultCachedVoice(BaseInlineQueryResultVoice, TitledMixin):
     """
-    Represents a link to a voice message stored on the Telegram servers. By default, this voice message will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the voice message.
+    Represents a link to a voice message stored on the Telegram servers. By default, this voice message
+    will be sent by the user. Alternatively, you can use input_message_content to send a message with the
+    specified content instead of the voice message.
 
     .. seealso:: https://core.telegram.org/bots/api#inlinequeryresultcachedvoice
     """
@@ -1053,7 +1067,9 @@ class BaseInlineQueryResultDocument(BaseInlineQueryResult):
 class InlineQueryResultDocument(BaseInlineQueryResultDocument, ThumbSizedMixin, TitledMixin,
                                 CaptionMixin, DescriptionMixin):
     """
-    Represents a link to a file. By default, this file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the file. Currently, only .PDF and .ZIP files can be sent using this method.
+    Represents a link to a file. By default, this file will be sent by the user with an optional caption.
+    Alternatively, you can use input_message_content to send a message with the specified content instead
+    of the file. Currently, only .PDF and .ZIP files can be sent using this method.
 
     .. seealso:: https://core.telegram.org/bots/api#inlinequeryresultdocument
     """
@@ -1064,7 +1080,10 @@ class InlineQueryResultDocument(BaseInlineQueryResultDocument, ThumbSizedMixin, 
 
 class InlineQueryResultCachedDocument(BaseInlineQueryResultDocument, TitledMixin, CaptionMixin, DescriptionMixin):
     """
-    Represents a link to a file stored on the Telegram servers. By default, this file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the file. Currently, only pdf-files and zip archives can be sent using this method.
+    Represents a link to a file stored on the Telegram servers. By default, this file will be sent by
+    the user with an optional caption. Alternatively, you can use input_message_content to send a message
+    with the specified content instead of the file. Currently, only pdf-files and zip archives can be
+    sent using this method.
 
     .. seealso:: https://core.telegram.org/bots/api#inlinequeryresultcacheddocument
     """
@@ -1074,7 +1093,8 @@ class InlineQueryResultCachedDocument(BaseInlineQueryResultDocument, TitledMixin
 
 class InlineQueryResultLocation(BaseInlineQueryResult, ThumbSizedMixin, TitledMixin):
     """
-    Represents a location on a map. By default, the location will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the location.
+    Represents a location on a map. By default, the location will be sent by the user. Alternatively,
+    you can use input_message_content to send a message with the specified content instead of the location.
 
     .. seealso:: https://core.telegram.org/bots/api#inlinequeryresultlocation
     """
@@ -1087,7 +1107,8 @@ class InlineQueryResultLocation(BaseInlineQueryResult, ThumbSizedMixin, TitledMi
 
 class InlineQueryResultVenue(InlineQueryResultLocation):
     """
-    Represents a venue. By default, the venue will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the venue.
+    Represents a venue. By default, the venue will be sent by the user. Alternatively, you can use
+    input_message_content to send a message with the specified content instead of the venue.
 
     .. seealso:: https://core.telegram.org/bots/api#inlinequeryresultvenue
     """
@@ -1100,7 +1121,9 @@ class InlineQueryResultVenue(InlineQueryResultLocation):
 
 class InlineQueryResultContact(BaseInlineQueryResult, ThumbSizedMixin):
     """
-    Represents a contact with a phone number. By default, this contact will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the contact.
+    Represents a contact with a phone number. By default, this contact will be sent by the user.
+    Alternatively, you can use input_message_content to send a message with the specified content
+    instead of the contact.
 
     .. seealso:: https://core.telegram.org/bots/api#inlinequeryresultcontact
     """
@@ -1113,9 +1136,10 @@ class InlineQueryResultContact(BaseInlineQueryResult, ThumbSizedMixin):
 
 
 class InlineQueryResultCachedSticker(BaseInlineQueryResult):
-
     """
-    Represents a link to a sticker stored on the Telegram servers. By default, this sticker will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the sticker.
+    Represents a link to a sticker stored on the Telegram servers. By default, this sticker will be
+    sent by the user. Alternatively, you can use input_message_content to send a message with the
+    specified content instead of the sticker.
 
     .. seealso:: https://core.telegram.org/bots/api#inlinequeryresultcachedsticker
     """
@@ -1126,7 +1150,6 @@ class InlineQueryResultCachedSticker(BaseInlineQueryResult):
 
 
 class InputTextMessageContent(BaseInputMessageContent, ParseModeMixin):
-
     """
     Represents the content of a text message to be sent as the result of an inline query.
 
@@ -1138,7 +1161,6 @@ class InputTextMessageContent(BaseInputMessageContent, ParseModeMixin):
 
 
 class InputLocationMessageContent(BaseInputMessageContent):
-
     """
     Represents the content of a location message to be sent as the result of an inline query.
 
@@ -1150,7 +1172,6 @@ class InputLocationMessageContent(BaseInputMessageContent):
 
 
 class InputVenueMessageContent(InputLocationMessageContent, TitledMixin):
-
     """
     Represents the content of a venue message to be sent as the result of an inline query.
 
@@ -1162,7 +1183,6 @@ class InputVenueMessageContent(InputLocationMessageContent, TitledMixin):
 
 
 class InputContactMessageContent(BaseInputMessageContent):
-
     """
     Represents the content of a contact message to be sent as the result of an inline query.
 
@@ -1193,7 +1213,6 @@ class ChosenInlineResult(BaseModel):
 ###################
 
 class Update(BaseModel):
-
     """
     This object represents an incoming update.
 

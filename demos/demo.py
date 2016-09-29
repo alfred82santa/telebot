@@ -98,6 +98,7 @@ def get_file(ctx, file_id):
 
     ctx.obj['loop'].run_until_complete(echo_result(bot.get_file(GetFileRequest(file_id=file_id))))
 
+
 @cli.command()
 @click.pass_context
 @click.argument('file_path', required=True)

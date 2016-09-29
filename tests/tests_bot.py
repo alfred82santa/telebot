@@ -11,6 +11,7 @@ from .telegram_api_mock_spec import mock_spec
 
 
 class TelegramModelFormatterIterTests(TestCase):
+
     def setUp(self):
         self.bot = Bot('testtoken',
                        client_plugins=[Mock()],
