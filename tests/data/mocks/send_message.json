@@ -1,0 +1,26 @@
+{
+  "ok": true,
+  "result": {
+    "message_id": 101,
+    "from": {
+      "id": 10000001,
+      "first_name": "telebot",
+      "username": "telebot"
+    },
+    "chat": {
+      "id": 10000002,
+      "first_name": "telebot_user",
+      "username": "telebot_user",
+      "type": "private"
+    },
+    "date": 1475520391,
+    "text": "test",
+    "entities": [
+      {
+        "type": "bold",
+        "offset": 0,
+        "length": 4
+      }
+    ]
+  }
+}

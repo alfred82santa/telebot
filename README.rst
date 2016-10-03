@@ -1,10 +1,10 @@
 |travis-master| |coverall-master| |doc-master| |pypi-downloads| |pypi-lastrelease| |python-versions|
 |project-status| |project-license| |project-format| |project-implementation|
 
-.. |travis-master| image:: https://travis-ci.org/alfred82santa/aiotelebot.svg?branch=master
+.. |travis-master| image:: https://travis-ci.org/alfred82santa/telebot.svg?branch=master
     :target: https://travis-ci.org/alfred82santa/aiotelebot
 
-.. |coverall-master| image:: https://coveralls.io/repos/alfred82santa/aiotelebot/badge.svg?branch=master&service=github
+.. |coverall-master| image:: https://coveralls.io/repos/alfred82santa/telebot/badge.svg?branch=master&service=github
     :target: https://coveralls.io/r/alfred82santa/aiotelebot?branch=master
 
 .. |doc-master| image:: https://readthedocs.org/projects/aiotelebot/badge/?version=latest
@@ -40,9 +40,9 @@
     :alt: Supported Python implementations
 
 
-=================
-Telebot Framework
-=================
+====================
+aioTelebot Framework
+====================
 
 **Unofficial Telegram Bot SDK for Python 3.5+**
 

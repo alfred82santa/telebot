@@ -14,11 +14,12 @@ spec['get_file']['mock'] = {'mock_type': 'RawFileMock',
                             'file': os.path.join(MOCK_DIR, 'get_file.json')}
 
 spec['download_file']['mock'] = {'mock_type': 'RawFileMock',
-                                 'file': os.path.join(MOCK_DIR, 'download_file.json')}
+                                 'file': os.path.join(MOCK_DIR, 'python-logo.png')}
 
 spec['get_user_profile_photos']['mock'] = {'mock_type': 'RawFileMock',
                                            'file': os.path.join(MOCK_DIR, 'get_user_profile_photos.json')}
 
+# TODO: Test webhook endpoint
 spec['set_webhook']['mock'] = {'mock_type': 'RawFileMock',
                                'file': os.path.join(MOCK_DIR, 'set_webhook.json')}
 

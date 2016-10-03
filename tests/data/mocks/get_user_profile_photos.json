@@ -1,0 +1,34 @@
+{
+  "ok": true,
+  "result": {
+    "total_count": 1,
+    "photos": [
+      [
+        {
+          "file_id": "aaAAbb1",
+          "file_size": 14511,
+          "width": 160,
+          "height": 160
+        },
+        {
+          "file_id": "aaAAbb2",
+          "file_size": 48458,
+          "width": 320,
+          "height": 320
+        },
+        {
+          "file_id": "aaAAbb3",
+          "file_size": 161155,
+          "width": 640,
+          "height": 640
+        },
+        {
+          "file_id": "aaAAbb4",
+          "file_size": 173081,
+          "width": 799,
+          "height": 799
+        }
+      ]
+    ]
+  }
+}

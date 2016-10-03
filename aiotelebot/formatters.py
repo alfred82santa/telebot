@@ -48,6 +48,8 @@ def telegram_encoder(content, *args, **kwargs):
 
     formatter = TelegramModelFormatterIter(content)
 
+    kwargs['endpoint_desc']['stream_request'] = True
+
     mp = MultipartWriter('form-data')
 
     for field, value in formatter:
