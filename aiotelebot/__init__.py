@@ -99,10 +99,7 @@ def check_result(func=None,
                 result = await func(self, *args, **kwargs)
                 response = result.data
                 if response.ok:
-                    if response.result is not None:
-                        return message_cls(response.result)
-                    else:
-                        return True
+                    return message_cls(response.result)
                 raise TelegramError(response.description, response.error_code)
             except Exception as ex:
                 self.logger.exception(ex)
@@ -129,7 +126,7 @@ class Bot:
 
         try:
             plugins.extend(client_plugins)
-        except TypeError:
+        except TypeError:  # pragma: no cover
             pass
 
         self.service_client = ServiceClient(name=client_name,

@@ -125,7 +125,7 @@ class ParseModeMixin(BaseModel):
     PARSE_MODE_MARKDOWN = 'Markdown'
     PARSE_MODE_HTML = 'HTML'
 
-    parse_mode = StringField()
+    parse_mode = StringField(default=PARSE_MODE_MARKDOWN)
 
 
 class BaseAttachment(BaseModel):
@@ -274,7 +274,7 @@ class UserProfilePhotos(BaseModel):
     """
 
     total_count = IntegerField()
-    photos = ArrayField(field_type=ModelField(model_class=PhotoSize))
+    photos = ArrayField(field_type=ArrayField(field_type=ModelField(model_class=PhotoSize)))
 
 
 class Message(BaseModel):
@@ -393,7 +393,8 @@ class InlineKeyboardMarkup(BaseKeyboardMarkup):
 
     """
 
-    inline_keyboard = ArrayField(field_type=ArrayField(field_type=ModelField(model_class=InlineKeyboardButton)))
+    inline_keyboard = ArrayField(field_type=ArrayField(field_type=ModelField(model_class=InlineKeyboardButton)),
+                                 default=[])
 
 
 class ReplyKeyboardMarkup(BaseKeyboardMarkup):
@@ -403,7 +404,8 @@ class ReplyKeyboardMarkup(BaseKeyboardMarkup):
     .. seealso:: https://core.telegram.org/bots/api#replykeyboardmarkup
     """
 
-    keyboard = ArrayField(field_type=ArrayField(field_type=ModelField(model_class=KeyboardButton)))
+    keyboard = ArrayField(field_type=ArrayField(field_type=ModelField(model_class=KeyboardButton)),
+                          default=[])
     resize_keyboard = BooleanField(default=False)
     one_time_keyboard = BooleanField(default=False)
     selective = BooleanField(default=False)
@@ -716,8 +718,8 @@ class GetUserProfilePhotoRequest(BaseModel):
     """
 
     user_id = StringIdField()
-    offset = IntegerField()
-    limit = IntegerField()
+    offset = IntegerField(default=0)
+    limit = IntegerField(default=100)
 
 
 class GetFileRequest(BaseModel):

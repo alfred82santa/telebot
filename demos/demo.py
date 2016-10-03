@@ -2,6 +2,7 @@ import asyncio
 import logging
 import sys
 from logging.handlers import WatchedFileHandler
+from math import ceil
 
 import click
 import os
@@ -15,7 +16,8 @@ LOG_DIR = os.path.join(os.path.dirname(__file__), 'logs')
 DOWNLOAD_DIR = os.path.join(os.path.dirname(__file__), 'downloads')
 
 from aiotelebot import Bot
-from aiotelebot.messages import GetFileRequest
+from aiotelebot.messages import GetFileRequest, GetUserProfilePhotoRequest, SendMessageRequest, InlineKeyboardMarkup, \
+    InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton
 
 
 def prepare_root_logger():
@@ -113,6 +115,75 @@ def download_file(ctx, file_path):
 
     ctx.obj['loop'].run_until_complete(write_on_file())
 
+
+@cli.command()
+@click.pass_context
+@click.argument('user_id', required=True)
+@click.argument('offset', required=True, default=0)
+@click.argument('limit', required=True, default=100)
+def get_user_profile_photos(ctx, user_id, offset, limit):
+    bot = ctx.obj['bot']
+
+    ctx.obj['loop'].run_until_complete(echo_result(bot.get_user_profile_photos(
+        GetUserProfilePhotoRequest(user_id=user_id, offset=offset, limit=limit)
+    )))
+
+
+available_reply_markups = ['inline', 'reply', 'hide', 'force']
+
+
+def build_reply_markups(markup, replies):
+    if not len(replies):
+        return None
+
+    if markup == 'inline':
+
+        reply_markup = InlineKeyboardMarkup()
+
+        rows = ceil(len(replies) / 3)
+
+        for r in range(0, rows):
+            row = []
+            for reply_idx in range(r * 3, (r + 1) * 3):
+                try:
+                    row.append(InlineKeyboardButton(text=replies[reply_idx],
+                                                    callback_data=replies[reply_idx]))
+                except IndexError:
+                    break
+            reply_markup.inline_keyboard.append(row)
+
+    if markup == 'reply':
+
+        reply_markup = ReplyKeyboardMarkup()
+
+        rows = ceil(len(replies) / 3)
+
+        for r in range(0, rows):
+            row = []
+            for reply_idx in range(r * 3, (r + 1) * 3):
+                try:
+                    row.append(KeyboardButton(text=replies[reply_idx]))
+                except IndexError:
+                    break
+            reply_markup.keyboard.append(row)
+
+    return reply_markup
+
+
+@cli.command()
+@click.pass_context
+@click.argument('chat_id', required=True)
+@click.argument('text', required=True)
+@click.option('--reply-markup', '-m', type=click.Choice(available_reply_markups))
+@click.option('--reply', '-r', multiple=True)
+def send_message(ctx, chat_id, text, reply_markup, reply):
+    bot = ctx.obj['bot']
+
+    reply_markup = build_reply_markups(reply_markup, reply)
+
+    ctx.obj['loop'].run_until_complete(echo_result(bot.send_message(
+        SendMessageRequest(chat_id=chat_id, text=text, reply_markup=reply_markup)
+    )))
 
 if __name__ == '__main__':
     cli(obj={})
