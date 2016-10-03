@@ -415,7 +415,7 @@ class TelegramEncoderTests(TestCase):
                                                                'callback_data': 'callback_data_2_3'}]]}
                                     )})
 
-        data = telegram_encoder(request)
+        data = telegram_encoder(request, endpoint_desc={})
         self.assertIsInstance(data, MultipartWriter)
 
         self.assertTrue(data.headers[hdrs.CONTENT_TYPE].startswith('multipart/form-data'))

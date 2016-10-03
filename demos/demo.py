@@ -174,6 +174,7 @@ def build_reply_markups(markup, replies):
 def parse_text(ctx, text):
     return text.replace('\\n', '\n')
 
+
 @cli.command()
 @click.pass_context
 @click.argument('chat_id', required=True)
@@ -190,6 +191,7 @@ def send_message(ctx, chat_id, text, reply_markup, reply):
                            text=text,
                            reply_markup=reply_markup)
     )))
+
 
 @cli.command()
 @click.pass_context
