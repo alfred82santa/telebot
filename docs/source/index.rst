@@ -16,6 +16,7 @@ Welcome to aioTelebot's documentation!
    changelog
    known_issues
    api/index
+   demo
 
 
 Indices and tables

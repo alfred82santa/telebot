@@ -17,7 +17,7 @@ DOWNLOAD_DIR = os.path.join(os.path.dirname(__file__), 'downloads')
 
 from aiotelebot import Bot
 from aiotelebot.messages import GetFileRequest, GetUserProfilePhotoRequest, SendMessageRequest, InlineKeyboardMarkup, \
-    InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton
+    InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton, SendPhotoRequest, FileModel, GetUpdatesRequest
 
 
 def prepare_root_logger():
@@ -86,10 +86,11 @@ def get_me(ctx):
 
 @cli.command()
 @click.pass_context
-def get_updates(ctx):
+@click.option('--offset', '-o', default=0)
+@click.option('--timeout', '-t', default=100)
+def get_updates(ctx, offset, timeout):
     bot = ctx.obj['bot']
-
-    ctx.obj['loop'].run_until_complete(echo_result(bot.get_updates()))
+    ctx.obj['loop'].run_until_complete(echo_result(bot.get_updates(GetUpdatesRequest(offset=offset, timeout=timeout))))
 
 
 @cli.command()
@@ -119,8 +120,8 @@ def download_file(ctx, file_path):
 @cli.command()
 @click.pass_context
 @click.argument('user_id', required=True)
-@click.argument('offset', required=True, default=0)
-@click.argument('limit', required=True, default=100)
+@click.option('--offset', '-o', default=0)
+@click.option('--limit', '-l', default=100)
 def get_user_profile_photos(ctx, user_id, offset, limit):
     bot = ctx.obj['bot']
 
@@ -170,10 +171,13 @@ def build_reply_markups(markup, replies):
     return reply_markup
 
 
+def parse_text(ctx, text):
+    return text.replace('\\n', '\n')
+
 @cli.command()
 @click.pass_context
 @click.argument('chat_id', required=True)
-@click.argument('text', required=True)
+@click.argument('text', required=True, callback=parse_text)
 @click.option('--reply-markup', '-m', type=click.Choice(available_reply_markups))
 @click.option('--reply', '-r', multiple=True)
 def send_message(ctx, chat_id, text, reply_markup, reply):
@@ -182,7 +186,26 @@ def send_message(ctx, chat_id, text, reply_markup, reply):
     reply_markup = build_reply_markups(reply_markup, reply)
 
     ctx.obj['loop'].run_until_complete(echo_result(bot.send_message(
-        SendMessageRequest(chat_id=chat_id, text=text, reply_markup=reply_markup)
+        SendMessageRequest(chat_id=chat_id,
+                           text=text,
+                           reply_markup=reply_markup)
+    )))
+
+@cli.command()
+@click.pass_context
+@click.argument('chat_id', required=True)
+@click.argument('file_path', required=True)
+@click.option('--reply-markup', '-m', type=click.Choice(available_reply_markups))
+@click.option('--reply', '-r', multiple=True)
+def send_photo(ctx, chat_id, file_path, reply_markup, reply):
+    bot = ctx.obj['bot']
+
+    reply_markup = build_reply_markups(reply_markup, reply)
+
+    ctx.obj['loop'].run_until_complete(echo_result(bot.send_photo(
+        SendPhotoRequest(chat_id=chat_id,
+                         photo=FileModel.from_filename(file_path),
+                         reply_markup=reply_markup)
     )))
 
 if __name__ == '__main__':
