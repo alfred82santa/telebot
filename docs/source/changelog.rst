@@ -3,6 +3,11 @@ Changelog
 
 .. _Click: http://click.pocoo.org/
 
+v0.2.1
+------
+
+- Added factory.
+
 v0.2.0
 ------
 
