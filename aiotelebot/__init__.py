@@ -769,7 +769,6 @@ class Bot:
         provider, data = callback_query.data.split(':', 1)
 
 
-
 class BotFactory(BaseFactory):
 
     def __call__(self, client_plugins=None, spec=None, spec_loader=None,
