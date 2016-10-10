@@ -420,7 +420,7 @@ class CallbackQuery(PersistentModel):
 
     .. seealso:: https://core.telegram.org/bots/api#callbackquery
     """
-    user_from = ModelField(name='from', model_class=User)
+    callback_query_from = ModelField(name='from', model_class=User)
     message = ModelField(model_class=Message)
     inline_message_id = StringIdField()
     data = StringIdField()
@@ -752,7 +752,7 @@ class InlineQuery(PersistentModel):
     .. seealso:: https://core.telegram.org/bots/api#inlinequery
     """
 
-    user_from = ModelField(name='from', model_class=User)
+    inline_query_from = ModelField(name='from', model_class=User)
     location = ModelField(model_class=Location)
     query = StringField()
     offset = IntegerField()
@@ -1204,7 +1204,7 @@ class ChosenInlineResult(BaseModel):
     """
 
     result_id = StringIdField()
-    user_from = ModelField(name='from', model_class=User)
+    chosen_inline_result_from = ModelField(name='from', model_class=User)
     location = ModelField(model_class=Location)
     inline_message_id = StringIdField()
     query = StringIdField()

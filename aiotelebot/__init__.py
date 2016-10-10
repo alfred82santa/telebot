@@ -2,12 +2,15 @@ import asyncio
 from asyncio import get_event_loop, Task
 from typing import List, Optional, Callable, Any, Union
 
+from dirty_loader.factories import BaseFactory, instance_params
+from service_client.factories import load_spec_by_sepc_loader
+
 from dirty_models.models import BaseModel
 from functools import wraps
-from logging import getLogger
+from logging import getLogger, Logger
 
 from service_client import ServiceClient
-from service_client.plugins import PathTokens, Headers
+from service_client.plugins import PathTokens, Headers, BasePlugin
 
 from .formatters import telegram_encoder, telegram_decoder
 from .messages import Update, SendMessageRequest, GetUpdatesRequest, SendLocationRequest, AnswerInlineQueryRequest, \
@@ -764,3 +767,60 @@ class Bot:
         :return:
         """
         provider, data = callback_query.data.split(':', 1)
+
+
+
+class BotFactory(BaseFactory):
+
+    def __call__(self, client_plugins=None, spec=None, spec_loader=None,
+                 logger=None, update_processors=None, message_processors=None,
+                 commands=None, inline_providers=None, **kwargs):
+        if spec_loader:
+            spec = load_spec_by_sepc_loader(spec_loader, self.loader)
+
+        client_plugins = self.iter_loaded_item_list(client_plugins, BasePlugin)
+
+        try:
+            logger = self.load_item(logger, Logger)
+        except TypeError:
+            pass
+
+        bot = super(BotFactory, self).__call__(spec=spec, client_plugins=client_plugins, logger=logger, **kwargs)
+
+        try:
+            for update_processor in update_processors:
+                if isinstance(update_processor, str):
+                    update_processor = self.loader.load_class(update_processor)
+                bot.register_update_processor(update_processor)
+        except TypeError:
+            pass
+
+        try:
+            for message_processor in message_processors:
+                if isinstance(message_processor, str):
+                    message_processor = self.loader.load_class(message_processor)
+                bot.register_message_processor(message_processor)
+        except TypeError:
+            pass
+
+        try:
+            for command, func in commands.items():
+                if isinstance(func, str):
+                    func = self.loader.load_class(func)
+                bot.register_command(command, func)
+        except AttributeError:
+            pass
+
+        try:
+            for name, inline_provider in inline_providers.items():
+                if isinstance(inline_provider, str):
+                    inline_provider = self.loader.load_class(inline_provider)
+                bot.register_inline_provider(name, inline_provider)
+        except AttributeError:
+            pass
+
+        return bot
+
+
+def register_bot_factories(loader):
+    loader.register_factory(Bot, BotFactory)
