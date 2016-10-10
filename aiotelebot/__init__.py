@@ -2,7 +2,7 @@ import asyncio
 from asyncio import get_event_loop, Task
 from typing import List, Optional, Callable, Any, Union
 
-from dirty_loader.factories import BaseFactory, instance_params
+from dirty_loader.factories import BaseFactory
 from service_client.factories import load_spec_by_sepc_loader
 
 from dirty_models.models import BaseModel
