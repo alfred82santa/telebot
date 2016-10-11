@@ -590,8 +590,8 @@ class Bot:
         while not Task.current_task(self.loop).cancelled():
             updates = await self.get_updates()
             for update in updates:
-                if update.update_id > self.update_offset:
-                    self.update_offset = update.update_id
+                if update.update_id >= self.update_offset:
+                    self.update_offset = update.update_id + 1
                 asyncio.ensure_future(self.process_update(update), loop=self.loop)
 
     async def process_update(self, update: Update):
