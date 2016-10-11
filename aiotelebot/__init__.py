@@ -604,18 +604,18 @@ class Bot:
         self.logger.debug("New update message: {}".format(repr(update)))
 
         for up_processor in self.registered_update_processors:
-            if up_processor(update) is True:
+            if await up_processor(update) is True:
                 self.logger.debug("Update processor dropped update message: {}".format(repr(up_processor)))
                 return
 
         if update.message:
-            asyncio.ensure(self.process_message(update.message))
+            asyncio.ensure_future(self.process_message(update.message))
         elif update.inline_query:
-            asyncio.ensure(self.process_inline_query(update.inline_query))
+            asyncio.ensure_future(self.process_inline_query(update.inline_query))
         elif update.chose_inline_result:
-            asyncio.ensure(self.process_chosen_inline_result(update.chose_inline_result))
+            asyncio.ensure_future(self.process_chosen_inline_result(update.chose_inline_result))
         elif update.callback_query:
-            asyncio.ensure(self.process_callback_query(update.callback_query))
+            asyncio.ensure_future(self.process_callback_query(update.callback_query))
 
     def register_update_processor(self, func: Callable[[Update],
                                                        Union[bool, None]]) -> Callable[[Update],
@@ -658,13 +658,13 @@ class Bot:
         try:
             for entity in message.entities:
                 if entity.type == 'bot_command' and entity.offset == 0:
-                    asyncio.ensure(self.execute_command(message), loop=self.loop)
+                    asyncio.ensure_future(self.execute_command(message), loop=self.loop)
                     return
         except TypeError:
             pass
 
         for processor in self.registered_message_processors:
-            asyncio.ensure(processor(message), loop=self.loop)
+            asyncio.ensure_future(processor(message), loop=self.loop)
 
     def register_message_processor(self, func: Callable[[Message], Any]) -> Callable[[Message], Any]:
         """
