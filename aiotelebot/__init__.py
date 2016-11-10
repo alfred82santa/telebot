@@ -22,6 +22,8 @@ from .messages import Update, SendMessageRequest, GetUpdatesRequest, SendLocatio
     GetChatCountRequest, GetChatMemberRequest
 
 
+__version__ = '0.2.1'
+
 TELEGRAM_BOT_API_BASEPATH = 'https://api.telegram.org/{prefix}bot{token}'
 
 

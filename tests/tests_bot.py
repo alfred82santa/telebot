@@ -6,7 +6,7 @@ from service_client.mocks import Mock, mock_manager
 
 from aiotelebot import Bot
 from aiotelebot.messages import User, Update, GetFileRequest, File, GetUserProfilePhotoRequest, UserProfilePhotos, \
-    SendMessageRequest, Message
+    SendMessageRequest, Message, Chat
 from tests.telegram_api_mock_spec import MOCK_DIR
 from .telegram_api_mock_spec import mock_spec
 
@@ -44,8 +44,9 @@ class TelegramModelFormatterIterTests(TestCase):
                                                                 "chat": {"id": 10000001,
                                                                          "first_name": "Telebot",
                                                                          "username": "telebotuser",
-                                                                         "type": "private"},
-                                                                "date": datetime.datetime.fromtimestamp(1475178814),
+                                                                         "type": Chat.Type.PRIVATE},
+                                                                "date": datetime.datetime(2016, 9, 29, 19, 53, 34,
+                                                                                          tzinfo=datetime.timezone.utc),
                                                                 "text": "test"}})
 
     @mock_manager.patch_mock_desc({'file': os.path.join(MOCK_DIR, 'get_updates_image.json')})
@@ -61,8 +62,9 @@ class TelegramModelFormatterIterTests(TestCase):
                                                                 "chat": {"id": 10000001,
                                                                          "first_name": "Telebot",
                                                                          "username": "telebotuser",
-                                                                         "type": "private"},
-                                                                "date": datetime.datetime.fromtimestamp(1475178814),
+                                                                         "type": Chat.Type.PRIVATE},
+                                                                "date": datetime.datetime(2016, 9, 29, 19, 53, 34,
+                                                                                          tzinfo=datetime.timezone.utc),
                                                                 "photo": [{"file_id": "aaAAbb1",
                                                                            "file_size": 565,
                                                                            "width": 90,
@@ -120,8 +122,9 @@ class TelegramModelFormatterIterTests(TestCase):
                                                   "chat": {"id": 10000002,
                                                            "first_name": "telebot_user",
                                                            "username": "telebot_user",
-                                                           "type": "private"},
-                                                  "date": datetime.datetime.fromtimestamp(1475520391),
+                                                           "type": Chat.Type.PRIVATE},
+                                                  "date": datetime.datetime(2016, 10, 3, 18, 46, 31,
+                                                                            tzinfo=datetime.timezone.utc),
                                                   "text": "test",
                                                   "entities": [{"type": "bold",
                                                                 "offset": 0,
