@@ -1,9 +1,11 @@
+import datetime
+from enum import Enum
 from mimetypes import guess_type
 
 from os.path import split
 
 from dirty_models.fields import StringIdField, StringField, ModelField, DateTimeField, ArrayField, IntegerField, \
-    BooleanField, FloatField, MultiTypeField, BaseField, BlobField
+    BooleanField, FloatField, MultiTypeField, BaseField, BlobField, EnumField
 from dirty_models.models import BaseModel
 
 
@@ -77,12 +79,14 @@ class Chat(BaseActor):
     .. seealso:: https://core.telegram.org/bots/api#chat
     """
 
-    TYPE_PRIVATE = 'private'
-    TYPE_GROUP = 'group'
-    TYPE_SUPERGROUP = 'supergroup'
-    TYPE_CHANNEL = 'channel'
+    class Type(Enum):
 
-    type = StringIdField()
+        PRIVATE = 'private'
+        GROUP = 'group'
+        SUPERGROUP = 'supergroup'
+        CHANNEL = 'channel'
+
+    type = EnumField(enum_class=Type)
     title = StringField()
 
 
@@ -93,14 +97,16 @@ class ChatMember(BaseModel):
     .. seealso:: https://core.telegram.org/bots/api#chatmember
     """
 
-    STATUS_CREATOR = 'creator'
-    STATUS_ADMINISTRATOR = 'administrator'
-    STATUS_MEMBER = 'member'
-    STATUS_LEFT = 'left'
-    STATUS_KICKED = 'kicked'
+    class Status(Enum):
+
+        CREATOR = 'creator'
+        ADMINISTRATOR = 'administrator'
+        MEMBER = 'member'
+        LEFT = 'left'
+        KICKED = 'kicked'
 
     user = ModelField(model_class=User)
-    status = StringIdField()
+    status = EnumField(enum_class=Status)
 
 
 class MessageEntity(BaseModel):
@@ -122,10 +128,12 @@ class ParseModeMixin(BaseModel):
     Mixin model with parse mode definition.
     """
 
-    PARSE_MODE_MARKDOWN = 'Markdown'
-    PARSE_MODE_HTML = 'HTML'
+    class ParseMode(Enum):
 
-    parse_mode = StringField(default=PARSE_MODE_MARKDOWN)
+        MODE_MARKDOWN = 'Markdown'
+        MODE_HTML = 'HTML'
+
+    parse_mode = EnumField(enum_class=ParseMode, default=ParseMode.MODE_MARKDOWN)
 
 
 class BaseAttachment(BaseModel):
@@ -286,11 +294,11 @@ class Message(BaseModel):
 
     message_id = MultiTypeField(field_types=[IntegerField(), StringIdField()])
     message_from = ModelField(name="from", model_class=User)
-    date = DateTimeField()
-    edit_date = DateTimeField()
+    date = DateTimeField(default_timezone=datetime.timezone.utc, force_timezone=True)
+    edit_date = DateTimeField(default_timezone=datetime.timezone.utc, force_timezone=True)
     chat = ModelField(model_class=Chat)
     forward_from = ModelField(model_class=User)
-    forward_date = DateTimeField()
+    forward_date = DateTimeField(default_timezone=datetime.timezone.utc, force_timezone=True)
     forward_from_chat = ModelField(model_class=Chat)
     reply_to_message = ModelField()
     text = StringField()
@@ -628,16 +636,18 @@ class SendChatActionRequest(BaseChatRequest):
 
     .. seealso:: https://core.telegram.org/bots/api#sendchataction
     """
-    ACTION_TYPING = 'typing'
-    ACTION_UPLOAD_PHOTO = 'upload_photo'
-    ACTION_RECORD_VIDEO = 'record_video'
-    ACTION_UPLOAD_VIDEO = 'upload_video'
-    ACTION_RECORD_AUDIO = 'record_audio'
-    ACTION_UPLOAD_AUDIO = 'upload_audio'
-    ACTION_UPLOAD_DOCUMENT = 'upload_document'
-    ACTION_FIND_LOCATION = 'find_location'
 
-    action = StringIdField()
+    class Action(Enum):
+        TYPING = 'typing'
+        UPLOAD_PHOTO = 'upload_photo'
+        RECORD_VIDEO = 'record_video'
+        UPLOAD_VIDEO = 'upload_video'
+        RECORD_AUDIO = 'record_audio'
+        UPLOAD_AUDIO = 'upload_audio'
+        UPLOAD_DOCUMENT = 'upload_document'
+        FIND_LOCATION = 'find_location'
+
+    action = EnumField(enum_class=Action)
 
 
 class KickChatMemberRequest(BaseChatRequest):
@@ -770,6 +780,20 @@ class BaseInlineQueryResult(PersistentModel):
     Base model for inline query result types.
     """
 
+    class Type(Enum):
+        ARTICLE = 'article'
+        PHOTO = 'photo'
+        GIF = 'gif'
+        MPEG4_GIF = 'mpeg4_gif'
+        VIDEO = 'video'
+        AUDIO = 'audio'
+        VOICE = 'voice'
+        DOCUMENT = 'document'
+        LOCATION = 'location'
+        VENUE = 'venue'
+        CONTACT = 'contact'
+        STICKER = 'sticker'
+
     input_message_content = ModelField(model_class=BaseInputMessageContent)
     reply_markup = ModelField(model_class=InlineKeyboardMarkup)
 
@@ -838,9 +862,7 @@ class InlineQueryResultArticle(BaseInlineQueryResult, ThumbSizedMixin, Descripti
     .. seealso:: https://core.telegram.org/bots/api#inlinequeryresultarticle
     """
 
-    TYPE_ARTICLE = 'article'
-
-    type = StringIdField(default=TYPE_ARTICLE, read_only=True)
+    type = StringIdField(default=BaseInlineQueryResult.Type.ARTICLE, read_only=True)
     url = StringIdField()
     hide_url = BooleanField(default=False)
 
@@ -850,9 +872,7 @@ class BaseInlineQueryResultPhoto(BaseInlineQueryResult):
     Base model for inline query result photo types.
     """
 
-    TYPE_PHOTO = 'photo'
-
-    type = StringIdField(default=TYPE_PHOTO, read_only=True)
+    type = StringIdField(default=BaseInlineQueryResult.Type.PHOTO, read_only=True)
 
 
 class InlineQueryResultPhoto(BaseInlineQueryResultPhoto, ThumbMixin, DescriptionMixin, TitledMixin, CaptionMixin):
@@ -884,9 +904,7 @@ class BaseInlineQueryResultGif(BaseInlineQueryResult):
     Base model for inline query result git picture types.
     """
 
-    TYPE_GIF = 'gif'
-
-    type = StringIdField(default=TYPE_GIF, read_only=True)
+    type = StringIdField(default=BaseInlineQueryResult.Type.GIF, read_only=True)
 
 
 class InlineQueryResultGif(BaseInlineQueryResultGif, ThumbMixin, TitledMixin, CaptionMixin):
@@ -919,9 +937,8 @@ class BaseInlineQueryResultMpeg4Gif(BaseInlineQueryResult):
     """
     Base model for inline query result mpeg4 animation types.
     """
-    TYPE_MPEG4_GIF = 'mpeg4_gif'
 
-    type = StringIdField(default=TYPE_MPEG4_GIF, read_only=True)
+    type = StringIdField(default=BaseInlineQueryResult.Type.MPEG4_GIF, read_only=True)
 
 
 class InlineQueryResultMpeg4Gif(BaseInlineQueryResultMpeg4Gif, ThumbMixin, TitledMixin, CaptionMixin):
@@ -955,9 +972,8 @@ class BaseInlineQueryResultVideo(BaseInlineQueryResult):
     """
     Base model for inline query result video types.
     """
-    TYPE_VIDEO = 'video'
 
-    type = StringIdField(default=TYPE_VIDEO, read_only=True)
+    type = StringIdField(default=BaseInlineQueryResult.Type.VIDEO, read_only=True)
 
 
 class InlineQueryResultVideo(BaseInlineQueryResultVideo, ThumbMixin, TitledMixin, CaptionMixin, DescriptionMixin):
@@ -992,9 +1008,8 @@ class BaseInlineQueryResultAudio(BaseInlineQueryResult):
     """
     Base model for inline query result audio types.
     """
-    TYPE_AUDIO = 'audio'
 
-    type = StringIdField(default=TYPE_AUDIO, read_only=True)
+    type = StringIdField(default=BaseInlineQueryResult.Type.AUDIO, read_only=True)
 
 
 class InlineQueryResultAudio(BaseInlineQueryResultAudio, TitledMixin):
@@ -1027,9 +1042,8 @@ class BaseInlineQueryResultVoice(BaseInlineQueryResult):
     """
     Base model for inline query result voice types.
     """
-    TYPE_VOICE = 'voice'
 
-    type = StringIdField(default=TYPE_VOICE, read_only=True)
+    type = StringIdField(default=BaseInlineQueryResult.Type.VOICE, read_only=True)
 
 
 class InlineQueryResultVoice(BaseInlineQueryResultVoice, TitledMixin):
@@ -1061,9 +1075,8 @@ class BaseInlineQueryResultDocument(BaseInlineQueryResult):
     """
     Base model for inline query result document types.
     """
-    TYPE_DOCUMENT = 'document'
 
-    type = StringIdField(default=TYPE_DOCUMENT, read_only=True)
+    type = StringIdField(default=BaseInlineQueryResult.Type.DOCUMENT, read_only=True)
 
 
 class InlineQueryResultDocument(BaseInlineQueryResultDocument, ThumbSizedMixin, TitledMixin,
@@ -1100,9 +1113,8 @@ class InlineQueryResultLocation(BaseInlineQueryResult, ThumbSizedMixin, TitledMi
 
     .. seealso:: https://core.telegram.org/bots/api#inlinequeryresultlocation
     """
-    TYPE_LOCATION = 'location'
 
-    type = StringIdField(default=TYPE_LOCATION, read_only=True)
+    type = StringIdField(default=BaseInlineQueryResult.Type.LOCATION, read_only=True)
     longitude = FloatField()
     latitude = FloatField()
 
@@ -1114,9 +1126,8 @@ class InlineQueryResultVenue(InlineQueryResultLocation):
 
     .. seealso:: https://core.telegram.org/bots/api#inlinequeryresultvenue
     """
-    TYPE_VENUE = 'venue'
 
-    type = StringIdField(default=TYPE_VENUE, read_only=True)
+    type = StringIdField(default=BaseInlineQueryResult.Type.VENUE, read_only=True)
     address = StringIdField()
     foursquare_id = StringIdField()
 
@@ -1129,9 +1140,8 @@ class InlineQueryResultContact(BaseInlineQueryResult, ThumbSizedMixin):
 
     .. seealso:: https://core.telegram.org/bots/api#inlinequeryresultcontact
     """
-    TYPE_CONTACT = 'contact'
 
-    type = StringIdField(default=TYPE_CONTACT, read_only=True)
+    type = StringIdField(default=BaseInlineQueryResult.Type.CONTACT, read_only=True)
     phone_number = StringIdField()
     first_name = StringField()
     last_name = StringField()
@@ -1145,9 +1155,8 @@ class InlineQueryResultCachedSticker(BaseInlineQueryResult):
 
     .. seealso:: https://core.telegram.org/bots/api#inlinequeryresultcachedsticker
     """
-    TYPE_STICKER = 'sticker'
 
-    type = StringIdField(default=TYPE_STICKER, read_only=True)
+    type = StringIdField(default=BaseInlineQueryResult.Type.STICKER, read_only=True)
     sticker_file_id = StringIdField()
 
 
