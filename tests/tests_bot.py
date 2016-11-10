@@ -45,7 +45,7 @@ class TelegramModelFormatterIterTests(TestCase):
                                                                          "first_name": "Telebot",
                                                                          "username": "telebotuser",
                                                                          "type": Chat.Type.PRIVATE},
-                                                                "date": datetime.datetime(2016, 9, 29, 21, 53, 34,
+                                                                "date": datetime.datetime(2016, 9, 29, 19, 53, 34,
                                                                                           tzinfo=datetime.timezone.utc),
                                                                 "text": "test"}})
 
@@ -63,7 +63,7 @@ class TelegramModelFormatterIterTests(TestCase):
                                                                          "first_name": "Telebot",
                                                                          "username": "telebotuser",
                                                                          "type": Chat.Type.PRIVATE},
-                                                                "date": datetime.datetime(2016, 9, 29, 21, 53, 34,
+                                                                "date": datetime.datetime(2016, 9, 29, 19, 53, 34,
                                                                                           tzinfo=datetime.timezone.utc),
                                                                 "photo": [{"file_id": "aaAAbb1",
                                                                            "file_size": 565,
@@ -123,7 +123,7 @@ class TelegramModelFormatterIterTests(TestCase):
                                                            "first_name": "telebot_user",
                                                            "username": "telebot_user",
                                                            "type": Chat.Type.PRIVATE},
-                                                  "date": datetime.datetime(2016, 10, 3, 20, 46, 31,
+                                                  "date": datetime.datetime(2016, 10, 3, 18, 46, 31,
                                                                             tzinfo=datetime.timezone.utc),
                                                   "text": "test",
                                                   "entities": [{"type": "bold",
