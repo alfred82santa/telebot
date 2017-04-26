@@ -415,7 +415,7 @@ class TelegramEncoderTests(TestCase):
                                                                'callback_data': 'callback_data_2_3'}]]}
                                     )})
 
-        data = telegram_encoder(request, endpoint_desc={})
+        data = telegram_encoder(request, endpoint_desc={}, request_params={})
         self.assertIsInstance(data, MultipartWriter)
 
         self.assertTrue(data.headers[hdrs.CONTENT_TYPE].startswith('multipart/form-data'))
@@ -427,14 +427,15 @@ class TelegramEncoderTests(TestCase):
         name_regex = re.compile('^.*\sname=\"([^"]+)\".*$')
         filename_regex = re.compile('^.*\sfilename=\"([^"]+)\".*$')
 
-        for part in data.parts:
+        for part in data:
+            part = part[0]
             name = name_regex.match(part.headers[hdrs.CONTENT_DISPOSITION]).group(1)
             self.assertTrue(part.headers[hdrs.CONTENT_DISPOSITION].startswith('form-data'))
 
             if name in flat_data:
-                self.assertEqual(part.obj, flat_data[name])
+                self.assertEqual(part._value.decode(), flat_data[name])
             elif name == 'reply_markup':
-                markup = loads(part.obj)
+                markup = loads(part._value.decode())
                 self.assertEqual(markup,  {'inline_keyboard': [[{'text': 'but1_1',
                                                                  'callback_data': 'callback_data_1_1'},
                                                                 {'text': 'but1_2',
