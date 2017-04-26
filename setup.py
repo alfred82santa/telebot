@@ -46,7 +46,7 @@ setup(
         'Development Status :: 4 - Beta'],
     packages=['aiotelebot'],
     include_package_data=False,
-    install_requires=['dirty-loader', 'aio-service-client>=0.5.2', 'aiohttp', 'dirty-models>=0.9.1'],
+    install_requires=['dirty-loader', 'aio-service-client>=0.5.4', 'dirty-models>=0.9.1'],
     description="Service Client Framework powered by Python asyncio.",
     long_description=open(os.path.join(os.path.dirname(__file__), 'README.rst')).read(),
     test_suite="nose.collector",

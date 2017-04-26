@@ -1,3 +1,2 @@
-aiohttp
 dirty-models>=0.9.2
-aio-service-client >= 0.5.3
+aio-service-client >= 0.5.4
