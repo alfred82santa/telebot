@@ -3,7 +3,7 @@ from json import dumps
 from aiohttp.hdrs import CONTENT_TYPE
 from aiohttp.multipart import MultipartWriter
 from aiohttp.payload import get_payload
-from multidict.__init__ import CIMultiDict
+from multidict import CIMultiDict
 
 from dirty_models.fields import ArrayField, ModelField
 from dirty_models.models import BaseModel
