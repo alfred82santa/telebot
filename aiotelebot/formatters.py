@@ -2,6 +2,9 @@ from json import dumps
 
 from aiohttp.hdrs import CONTENT_TYPE
 from aiohttp.multipart import MultipartWriter
+from aiohttp.payload import get_payload
+from multidict.__init__ import CIMultiDict
+
 from dirty_models.fields import ArrayField, ModelField
 from dirty_models.models import BaseModel
 from dirty_models.utils import ModelFormatterIter, JSONEncoder, ListFormatterIter
@@ -55,15 +58,21 @@ def telegram_encoder(content, *args, **kwargs):
     for field, value in formatter:
         content_dispositon = {'name': field}
         if isinstance(value, FileModel):
-            part = mp.append(value.stream)
+            part = get_payload(value.stream, headers=CIMultiDict())
             if value.name:
                 content_dispositon['filename'] = value.name
             if value.mime_type:
                 part.headers[CONTENT_TYPE] = value.mime_type
         else:
-            part = mp.append(str(value))
+            part = get_payload(str(value), headers=CIMultiDict())
 
         part.set_content_disposition("form-data", **content_dispositon)
+        mp.append_payload(part)
+
+    try:
+        kwargs['request_params']['headers'].update(mp.headers)
+    except KeyError:
+        kwargs['request_params']['headers'] = mp.headers
 
     return mp
 

@@ -62,7 +62,7 @@ async def echo_result(fut):
 
 
 @click.group()
-@click.option('--token', prompt='Your bot token',
+@click.option('--token', prompt='Your bot token', required=True,
               help='Token for already registered bot.')
 @click.pass_context
 def cli(ctx, token):
