@@ -3,6 +3,17 @@ Changelog
 
 .. _Click: http://click.pocoo.org/
 
+v0.2.3
+------
+
+* Use last version of service-client.
+
+* Allow to use keyword parameter to build request model when call
+  methods.
+
+* Fix problem with documentation.
+
+
 v0.2.1
 ------
 

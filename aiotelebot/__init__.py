@@ -1,34 +1,31 @@
 import asyncio
 from asyncio import get_event_loop, Task
-from typing import List, Optional, Callable, Any, Union
+from logging import getLogger, Logger
+from typing import List, Callable, Any, Union
 
 from dirty_loader.factories import BaseFactory
-from service_client.factories import load_spec_by_sepc_loader
+from functools import wraps
+from service_client import ServiceClient
+from service_client.factories import load_spec_by_spec_loader
+from service_client.plugins import PathTokens, Headers, BasePlugin
+from service_client.utils import build_parameter_object
 
 from dirty_models.models import BaseModel
-from functools import wraps
-from logging import getLogger, Logger
-
-from service_client import ServiceClient
-from service_client.plugins import PathTokens, Headers, BasePlugin
-
 from .formatters import telegram_encoder, telegram_decoder
 from .messages import Update, SendMessageRequest, GetUpdatesRequest, SendLocationRequest, AnswerInlineQueryRequest, \
     AnswerCallbackQueryRequest, SendPhotoRequest, Message, User, File, UserProfilePhotos, Chat, ChatMember, \
     GetFileRequest, GetUserProfilePhotoRequest, SetWebhookRequest, SendVideoRequest, SendAudioRequest, \
     SendDocumentRequest, SendStickerRequest, SendVoiceRequest, SendVenueRequest, SendContactRequest, \
     SendChatActionRequest, EditMessageTextRequest, EditMessageCaptionRequest, EditMessageReplyMarkupRequest, \
-    KickChatMemberRequest, LeaveChatRequest, UnbanChatMemberRequest, GetChatRequest, GetChatAdministratorsRequest,\
+    KickChatMemberRequest, LeaveChatRequest, UnbanChatMemberRequest, GetChatRequest, GetChatAdministratorsRequest, \
     GetChatCountRequest, GetChatMemberRequest
 
-
-__version__ = '0.2.2'
+__version__ = '0.2.3'
 
 TELEGRAM_BOT_API_BASEPATH = 'https://api.telegram.org/{prefix}bot{token}'
 
 
 class TelegramError(Exception):
-
     """
     Telegram error exception.
 
@@ -109,14 +106,15 @@ def check_result(func=None,
             except Exception as ex:
                 self.logger.exception(ex)
                 raise ex
+
         return inner
+
     if func:
         return wrapper(func)
     return wrapper
 
 
 class Bot:
-
     def __init__(self, token, base_path=TELEGRAM_BOT_API_BASEPATH,
                  client_name='TelegramBot', client_plugins=None, updates_timeout=100,
                  spec=None, logger=None, loop=None):
@@ -163,9 +161,10 @@ class Bot:
         return user
 
     @check_result(message_cls=list_of(Update))
-    async def get_updates(self, query: Optional[GetUpdatesRequest]=None) -> List[Update]:
+    @build_parameter_object(arg_name='query')
+    async def get_updates(self, query: GetUpdatesRequest = None) -> List[Update]:
         """
-        Use this method to receive incoming updates using long polling (wiki).
+        Use this method to receive incoming updates using long polling.
         An Array of :class:`~messages.Update` objects is returned.
 
         .. seealso:: https://core.telegram.org/bots/api#getupdates
@@ -180,13 +179,14 @@ class Bot:
         return await self.service_client.get_updates(query)
 
     @check_result(message_cls=File)
+    @build_parameter_object
     async def get_file(self, request: GetFileRequest) -> File:
         """
         Use this method to get basic info about a file and prepare it for downloading.
         For the moment, bots can download files of up to 20MB in size. On success, a File object is returned.
-        The file can then be downloaded via :meth:`~bot.download_file`, where <file_path> is taken from the response.
-        It is guaranteed that the link will be valid for at least 1 hour. When the link expires,
-        a new one can be requested by calling :meth:`~bot.get_file` again.
+        The file can then be downloaded via :meth:`~Bot.download_file`, where ``<file_path>`` is
+        taken from the response. It is guaranteed that the link will be valid for at least 1 hour.
+        When the link expires, a new one can be requested by calling :meth:`~Bot.get_file` again.
 
         .. seealso:: https://core.telegram.org/bots/api#getfile
 
@@ -196,13 +196,14 @@ class Bot:
 
     async def download_file(self, file_path: str):
         """
-        Download file by file path. File path is retrieve using :meth:`~bot.get_file` method.
+        Download file by file path. File path is retrieve using :meth:`~Bot.get_file` method.
 
         It returns ClientResponse object. You could use read method in order to get file data.
         """
         return await self.service_client.download_file(file_path=file_path)
 
     @check_result(message_cls=UserProfilePhotos)
+    @build_parameter_object
     async def get_user_profile_photos(self, request: GetUserProfilePhotoRequest) -> UserProfilePhotos:
         """
         Use this method to get a list of profile pictures for a user.
@@ -215,6 +216,7 @@ class Bot:
         return await self.service_client.get_user_profile_photos(request)
 
     @check_result
+    @build_parameter_object
     async def set_webhook(self, request: SetWebhookRequest) -> bool:
         """
         Use this method to specify a url and receive incoming updates via an outgoing webhook.
@@ -223,7 +225,7 @@ class Bot:
         we will give up after a reasonable amount of attempts.
 
         If you'd like to make sure that the Webhook request comes from Telegram, we recommend
-        using a secret path in the URL, e.g. https://www.example.com/<token>. Since nobody
+        using a secret path in the URL, e.g. ``https://www.example.com/<token>``. Since nobody
         else knows your bot‘s token, you can be pretty sure it’s us.
 
         .. note::
@@ -242,6 +244,7 @@ class Bot:
         return await self.service_client.set_webhook(request)
 
     @check_result
+    @build_parameter_object
     async def send_message(self, request: SendMessageRequest) -> Message:
 
         """
@@ -255,6 +258,7 @@ class Bot:
         return await self.service_client.send_message(request)
 
     @check_result
+    @build_parameter_object
     async def send_photo(self, request: SendPhotoRequest) -> Message:
 
         """
@@ -268,6 +272,7 @@ class Bot:
         return await self.service_client.send_photo(request)
 
     @check_result
+    @build_parameter_object
     async def send_video(self, request: SendVideoRequest) -> Message:
 
         """
@@ -283,6 +288,7 @@ class Bot:
         return await self.service_client.send_video(request)
 
     @check_result
+    @build_parameter_object
     async def send_audio(self, request: SendAudioRequest) -> Message:
 
         """
@@ -302,6 +308,7 @@ class Bot:
         return await self.service_client.send_audio(request)
 
     @check_result
+    @build_parameter_object
     async def send_document(self, request: SendDocumentRequest) -> Message:
 
         """
@@ -316,6 +323,7 @@ class Bot:
         return await self.service_client.send_document(request)
 
     @check_result
+    @build_parameter_object
     async def send_sticker(self, request: SendStickerRequest) -> Message:
 
         """
@@ -327,6 +335,7 @@ class Bot:
         return await self.service_client.send_sticker(request)
 
     @check_result
+    @build_parameter_object
     async def send_voice(self, request: SendVoiceRequest) -> Message:
 
         """
@@ -344,6 +353,7 @@ class Bot:
         return await self.service_client.send_voice(request)
 
     @check_result
+    @build_parameter_object
     async def send_location(self, request: SendLocationRequest) -> Message:
 
         """
@@ -357,6 +367,7 @@ class Bot:
         return await self.service_client.send_location(request)
 
     @check_result
+    @build_parameter_object
     async def send_venue(self, request: SendVenueRequest) -> Message:
 
         """
@@ -370,6 +381,7 @@ class Bot:
         return await self.service_client.send_venue(request)
 
     @check_result
+    @build_parameter_object
     async def send_contact(self, request: SendContactRequest) -> Message:
 
         """
@@ -383,6 +395,7 @@ class Bot:
         return await self.service_client.send_contact(request)
 
     @check_result(message_cls=result_bool)
+    @build_parameter_object
     async def send_chat_action(self, request: SendChatActionRequest) -> bool:
 
         """
@@ -394,7 +407,7 @@ class Bot:
 
             The ImageBot needs some time to process a request and upload the image.
             Instead of sending a text message along the lines of “Retrieving image, please wait…”,
-            the bot may use :meth:`~bot.send_chat_action` with action = upload_photo.
+            the bot may use :meth:`~Bot.send_chat_action` with action = upload_photo.
             The user will see a “sending photo” status for the bot.
 
 
@@ -406,6 +419,7 @@ class Bot:
         return await self.service_client.send_chat_action(request)
 
     @check_result(message_cls=result_bool)
+    @build_parameter_object
     async def answer_inline_query(self, request: AnswerInlineQueryRequest) -> bool:
 
         """
@@ -421,6 +435,7 @@ class Bot:
         return await self.service_client.answer_inline_query(request)
 
     @check_result(message_cls=result_bool)
+    @build_parameter_object
     async def answer_callback_query(self, request: AnswerCallbackQueryRequest) -> bool:
 
         """
@@ -436,6 +451,7 @@ class Bot:
         return await self.service_client.answer_callback_query(request)
 
     @check_result(message_cls=message_or_true)
+    @build_parameter_object
     async def edit_message_text(self, request: EditMessageTextRequest) -> Union[bool, Message]:
 
         """
@@ -451,12 +467,14 @@ class Bot:
         return await self.service_client.edit_message_text(request)
 
     @check_result(message_cls=message_or_true)
+    @build_parameter_object
     async def edit_message_caption(self, request: EditMessageCaptionRequest) -> Union[bool, Message]:
 
         """
         Use this method to edit captions of messages sent by the bot or via the bot (for inline bots).
-         On success, if edited message is sent by the bot, the edited :class:`~messages.Message` is returned,
-         otherwise True is returned.
+
+        On success, if edited message is sent by the bot, the edited :class:`~messages.Message` is returned,
+        otherwise True is returned.
 
         .. seealso:: https://core.telegram.org/bots/api#editmessagecaption
 
@@ -466,6 +484,7 @@ class Bot:
         return await self.service_client.edit_message_caption(request)
 
     @check_result(message_cls=message_or_true)
+    @build_parameter_object
     async def edit_message_reply_markup(self, request: EditMessageReplyMarkupRequest) -> Union[bool, Message]:
 
         """
@@ -481,6 +500,7 @@ class Bot:
         return await self.service_client.edit_message_reply_markup(request)
 
     @check_result(message_cls=result_bool)
+    @build_parameter_object
     async def kick_chat_member(self, request: KickChatMemberRequest) -> bool:
 
         """
@@ -497,6 +517,7 @@ class Bot:
         return await self.service_client.kick_chat_member(request)
 
     @check_result(message_cls=result_bool)
+    @build_parameter_object
     async def leave_chat(self, request: LeaveChatRequest) -> bool:
 
         """
@@ -510,6 +531,7 @@ class Bot:
         return await self.service_client.leave_chat(request)
 
     @check_result(message_cls=result_bool)
+    @build_parameter_object
     async def unban_chat_member(self, request: UnbanChatMemberRequest) -> bool:
 
         """
@@ -525,6 +547,7 @@ class Bot:
         return await self.service_client.unban_chat_member(request)
 
     @check_result(message_cls=Chat)
+    @build_parameter_object
     async def get_chat(self, request: GetChatRequest) -> Chat:
 
         """
@@ -540,6 +563,7 @@ class Bot:
         return await self.service_client.get_chat(request)
 
     @check_result(message_cls=list_of(ChatMember))
+    @build_parameter_object
     async def get_chat_administrators(self, request: GetChatAdministratorsRequest) -> List[ChatMember]:
 
         """
@@ -556,6 +580,7 @@ class Bot:
         return await self.service_client.get_chat_administrators(request)
 
     @check_result(message_cls=int)
+    @build_parameter_object
     async def get_chat_members_count(self, request: GetChatCountRequest) -> int:
 
         """
@@ -569,6 +594,7 @@ class Bot:
         return await self.service_client.get_chat_members_count(request)
 
     @check_result(message_cls=ChatMember)
+    @build_parameter_object
     async def get_chat_member(self, request: GetChatMemberRequest) -> ChatMember:
 
         """
@@ -706,7 +732,7 @@ class Bot:
         except Exception as ex:
             self.logger.exception(ex)
 
-    def register_command(self, command: str, func: Union[Callable[[Message], Any], None]=None):
+    def register_command(self, command: str, func: Union[Callable[[Message], Any], None] = None):
 
         def inner(func: Callable[[Message]]):
             self.registered_commands[command] = func
@@ -717,7 +743,7 @@ class Bot:
 
         return inner
 
-    def register_inline_provider(self, name: str, func: Union[Callable[[Message], Any], None]=None):
+    def register_inline_provider(self, name: str, func: Union[Callable[[Message], Any], None] = None):
 
         def inner(func):
             self.registered_inline_providers[name] = func
@@ -774,12 +800,15 @@ class Bot:
 
 
 class BotFactory(BaseFactory):
+    """
+    Bot factory for DirtyLoader loaders.
+    """
 
     def __call__(self, client_plugins=None, spec=None, spec_loader=None,
                  logger=None, update_processors=None, message_processors=None,
                  commands=None, inline_providers=None, **kwargs):
         if spec_loader:
-            spec = load_spec_by_sepc_loader(spec_loader, self.loader)
+            spec = load_spec_by_spec_loader(spec_loader, self.loader)
 
         client_plugins = self.iter_loaded_item_list(client_plugins, BasePlugin)
 
@@ -826,4 +855,9 @@ class BotFactory(BaseFactory):
 
 
 def register_bot_factories(loader):
+    """
+    Helper to register bot factory in a DirtyLoader loader.
+
+    :param loader: DirtyLoader loader
+    """
     loader.register_factory(Bot, BotFactory)
