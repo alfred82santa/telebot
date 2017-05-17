@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 Welcome to aioTelebot's documentation!
-===================================
+======================================
 
 
 .. include:: ../../README.rst
